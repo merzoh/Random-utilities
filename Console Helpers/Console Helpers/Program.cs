@@ -29,7 +29,7 @@ public static class ConsoleHelpers
                     input = input[..^1];
                 }
             }
-            else
+            else if(!char.IsControl(keyInfo.KeyChar))
             {
                 input += keyInfo.KeyChar;
                 Console.Write(maskChar);
