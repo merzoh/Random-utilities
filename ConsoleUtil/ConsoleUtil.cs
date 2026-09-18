@@ -1,19 +1,5 @@
-﻿class Program
-{
-    static void Main()
-    {
-        OptionSelector<Options> selector = new OptionSelector<Options>();
-        selector.Run("Look at this shit!");
+﻿namespace ConsoleUtil;
 
-    }
-}
-
-enum Options
-{
-    Mike,
-    Zach,
-    Nick
-}
 public class MenuOptions
 {
     public string OptionName { get; private set; }
@@ -26,13 +12,13 @@ public class MenuOptions
         IsSelected = false;
     }
     public void UpdatePos(int posX, int posY) => StartPos = (posX, posY);
-    
-    
+
+
 }
 public class OptionSelector<T> where T : Enum
 {
     //Fields and Properties
-    
+
     private MenuOptions[] _options;
     private int _selectedIndex = 0;
     public int OptionY => (int)(Console.WindowHeight * (2f / 3f)) - 1;
@@ -46,16 +32,16 @@ public class OptionSelector<T> where T : Enum
         Type enumType = typeof(T);
         Array enumValues = Enum.GetValues(enumType);
         int padding = ((Console.WindowWidth - string.Join("", Enum.GetNames(enumType)).Length) / (enumValues.Length + 1));
-        
+
         int currentX = padding - 1;
-        
+
         _options = new MenuOptions[enumValues.Length];
         for (int i = 0; i < enumValues.Length; i++)
         {
             string name = enumValues.GetValue(i).ToString();
-            _options[i] = new MenuOptions(name, (currentX , OptionY));
+            _options[i] = new MenuOptions(name, (currentX, OptionY));
             currentX += name.Length + padding;
-            
+
         }
         _options[_selectedIndex].IsSelected = true;
     }
@@ -63,17 +49,17 @@ public class OptionSelector<T> where T : Enum
     public T Run(string prompt)
     {
         T[] values = (T[])Enum.GetValues(typeof(T));
-        ConsoleHelpers.DrawOptionWindow(prompt);
+        ConsoleHelpers.DrawWindow(prompt);
         ConsoleHelpers.DrawOptions(_options);
         ConsoleKeyInfo keyInfo = default;
         do
         {
-            
+
             if (_windowHeight != Console.WindowHeight || _windowWidth != Console.WindowWidth)
             {
                 Console.Clear();
                 ConsoleHelpers.UpdateOptionPositions<T>(_options, OptionY);
-                ConsoleHelpers.DrawOptionWindow(prompt);
+                ConsoleHelpers.DrawWindow(prompt);
                 ConsoleHelpers.DrawOptions(_options);
                 _windowWidth = Console.WindowWidth;
                 _windowHeight = Console.WindowHeight;
@@ -107,14 +93,14 @@ public class OptionSelector<T> where T : Enum
             }
             else
                 Thread.Sleep(100);
-            
+
 
         } while (keyInfo.Key != ConsoleKey.Enter);
-        
+
         return values[_selectedIndex];
     }
-    
-    
+
+
 }
 
 public static class ConsoleHelpers
@@ -123,7 +109,7 @@ public static class ConsoleHelpers
     {
         foreach (var option in options)
         {
-            
+
             if (option.IsSelected)
             {
                 Console.SetCursorPosition((option.StartPos.x - 1), option.StartPos.y);
@@ -137,7 +123,7 @@ public static class ConsoleHelpers
                 Console.SetCursorPosition(option.StartPos.x, option.StartPos.y);
                 Console.Write(option.OptionName);
             }
-                
+
         }
     }
     public static void DrawOptions(MenuOptions[] options, int direction, int currentSelection)
@@ -165,7 +151,7 @@ public static class ConsoleHelpers
             currentX += option.OptionName.Length + padding;
         }
     }
-    public static void DrawOptionWindow(string prompt)
+    public static void DrawWindow(string prompt)
     {
         Console.CursorVisible = false;
         DrawLine();
@@ -202,7 +188,7 @@ public static class ConsoleHelpers
                     input = input[..^1];
                 }
             }
-            else if(!char.IsControl(keyInfo.KeyChar))
+            else if (!char.IsControl(keyInfo.KeyChar))
             {
                 input += keyInfo.KeyChar;
                 Console.Write(maskChar);
