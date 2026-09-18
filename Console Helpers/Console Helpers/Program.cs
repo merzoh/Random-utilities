@@ -12,6 +12,10 @@ enum Options
 {
     Message,
     Exit,
+    Zach,
+    Mike,
+    Nick
+
 }
 public class MenuOptions
 {
@@ -65,14 +69,16 @@ public class OptionSelector<T> where T : Enum
                 case ConsoleKey.LeftArrow:
                     if (_selectedIndex != 0)
                     {
-                        ConsoleHelpers.DrawOptions(_options, true);
+                        ConsoleHelpers.DrawOptions(_options, -1, _selectedIndex);
+                        _options[_selectedIndex].IsSelected = false;
                         _selectedIndex--;
                     }
                     break;
                 case ConsoleKey.RightArrow:
                     if (_selectedIndex != values.Length - 1)
                     {
-                        ConsoleHelpers.DrawOptions(_options, false);
+                        ConsoleHelpers.DrawOptions(_options, 1, _selectedIndex);
+                        _options[_selectedIndex].IsSelected = false;
                         _selectedIndex++;
                     }
                     break;
@@ -94,28 +100,38 @@ public static class ConsoleHelpers
     {
         foreach (var option in options)
         {
-            Console.SetCursorPosition(option.StartPos.x, option.StartPos.y);
+            
             if (option.IsSelected)
             {
+                Console.SetCursorPosition(option.StartPos.x - 1, option.StartPos.y);
                 Console.ForegroundColor = ConsoleColor.Black;
                 Console.BackgroundColor = ConsoleColor.White;
-                Console.Write($"\b[{option.OptionName}]");
-                Console.BackgroundColor = ConsoleColor.Black;
-                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write($"[{option.OptionName}]");
+                Console.ResetColor();
             }
             else
+            {
+                Console.SetCursorPosition(option.StartPos.x, option.StartPos.y);
                 Console.Write(option.OptionName);
+            }
+                
         }
     }
-    public static void DrawOptions(MenuOptions[] options, bool moveLeft)
+    public static void DrawOptions(MenuOptions[] options, int direction, int currentSelection)
     {
-        if (moveLeft)
-        {
-
-        }
+        Console.SetCursorPosition(options[currentSelection].StartPos.x - 1, options[currentSelection].StartPos.y);
+        Console.ResetColor();
+        Console.Write(new string(' ', options[currentSelection].OptionName.Length + 2));
+        Console.SetCursorPosition(options[currentSelection].StartPos.x + 1, options[currentSelection].StartPos.y);
+        Console.Write($"{options[currentSelection].OptionName} ");
+        Console.ForegroundColor = ConsoleColor.Black;
+        Console.BackgroundColor = ConsoleColor.White;
+        Console.SetCursorPosition(options[currentSelection + direction].StartPos.x, options[currentSelection + direction].StartPos.y);
+        Console.Write($"[{options[currentSelection + direction].OptionName}]");
     }
     public static void DrawOptionWindow(MenuOptions[] options, string prompt)
-    {        
+    {
+        Console.CursorVisible = false;
         DrawLine();
         Console.SetCursorPosition(0, Console.WindowHeight - 1);
         DrawLine();
