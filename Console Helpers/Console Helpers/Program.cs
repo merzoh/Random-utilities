@@ -69,10 +69,10 @@ public class OptionSelector<T> where T : Enum
         T[] values = (T[])Enum.GetValues(typeof(T));
         ConsoleHelpers.DrawOptionWindow(prompt);
         ConsoleHelpers.DrawOptions(_options);
-        ConsoleKeyInfo keyInfo;
+        ConsoleKeyInfo keyInfo = default;
         do
         {
-            keyInfo = Console.ReadKey(true);
+            
             if (_windowHeight != Console.WindowHeight || _windowWidth != Console.WindowWidth)
             {
                 Console.Clear();
@@ -82,27 +82,35 @@ public class OptionSelector<T> where T : Enum
                 _windowWidth = Console.WindowWidth;
                 _windowHeight = Console.WindowHeight;
             }
-            switch (keyInfo.Key)
+            if (Console.KeyAvailable)
             {
-                case ConsoleKey.LeftArrow:
-                    if (_selectedIndex != 0)
-                    {
-                        ConsoleHelpers.DrawOptions(_options, -1, _selectedIndex);
-                        _options[_selectedIndex].IsSelected = false;
-                        _selectedIndex--;
-                    }
-                    break;
-                case ConsoleKey.RightArrow:
-                    if (_selectedIndex != values.Length - 1)
-                    {
-                        ConsoleHelpers.DrawOptions(_options, 1, _selectedIndex);
-                        _options[_selectedIndex].IsSelected = false;
-                        _selectedIndex++;
-                    }
-                    break;
-                default:
-                    break;
+                keyInfo = Console.ReadKey(true);
+                switch (keyInfo.Key)
+                {
+                    case ConsoleKey.LeftArrow:
+                        if (_selectedIndex != 0)
+                        {
+                            ConsoleHelpers.DrawOptions(_options, -1, _selectedIndex);
+                            _options[_selectedIndex].IsSelected = false;
+                            _selectedIndex--;
+                            _options[_selectedIndex].IsSelected = true;
+                        }
+                        break;
+                    case ConsoleKey.RightArrow:
+                        if (_selectedIndex != values.Length - 1)
+                        {
+                            ConsoleHelpers.DrawOptions(_options, 1, _selectedIndex);
+                            _options[_selectedIndex].IsSelected = false;
+                            _selectedIndex++;
+                            _options[_selectedIndex].IsSelected = true;
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
+            else
+                Thread.Sleep(100);
             
 
         } while (keyInfo.Key != ConsoleKey.Enter);
