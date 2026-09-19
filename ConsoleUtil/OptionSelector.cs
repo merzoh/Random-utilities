@@ -8,50 +8,70 @@ public class OptionSelector<T> where T : Enum
 {
     //Fields and Properties
 
-    private MenuOptions[] _options;
-    private int _selectedIndex = 0;
-    public int OptionY => (int)(Console.WindowHeight * (2f / 3f)) - 1;
-    private int _windowWidth;
-    private int _windowHeight;
+    private readonly MenuOptions[] _options;
+    private int SelectedIndex { get; set; } = 0;
+    private static int OptionY => (int)(Console.WindowHeight * (2f / 3f)) - 1;
+    private int WindowWidth { get; set; }
+    private int WindowHeight { get; set; }
+    private T[] Values { get; }
+    private Type EnumType { get; }
+    private int TotalChar { get; set; } = 0;
+    private int Padding { get; set; }
+
     //Constructor that takes an enum type and creates a MenuOptions array based on the enum values
     public OptionSelector()
     {
-        _windowWidth = Console.WindowWidth;
-        _windowHeight = Console.WindowHeight;
-        Type enumType = typeof(T);
-        Array enumValues = Enum.GetValues(enumType);
-        int padding = ((Console.WindowWidth - string.Join("", Enum.GetNames(enumType)).Length) / (enumValues.Length + 1));
-
-        int currentX = padding - 1;
-
-        _options = new MenuOptions[enumValues.Length];
-        for (int i = 0; i < enumValues.Length; i++)
+        EnumType = typeof(T);
+        Values = (T[])Enum.GetValues(EnumType);
+        foreach (var value in Values)
         {
-            string name = enumValues.GetValue(i).ToString();
+            TotalChar += value.ToString().Length;
+        }
+        WindowWidth = Console.WindowWidth;
+        WindowHeight = Console.WindowHeight;
+        Padding = ((WindowWidth - TotalChar) / (Values.Length + 1));
+
+        int currentX = Padding - 1;
+
+        _options = new MenuOptions[Values.Length];
+        for (int i = 0; i < Values.Length; i++)
+        {
+            string name = Values.GetValue(i).ToString();
             _options[i] = new MenuOptions(name, (currentX, OptionY));
-            currentX += name.Length + padding;
+            currentX += name.Length + Padding;
 
         }
-        _options[_selectedIndex].IsSelected = true;
+        _options[SelectedIndex].IsSelected = true;
     }
     //Methods
+    public void UpdateOptionPositions()
+    {
+        
+        int padding = (WindowWidth - TotalChar / (Values.Length + 1));
+        int currentX = padding - 1;
+        int posY = OptionY;
+        foreach (var option in _options)
+        {
+            option.UpdatePos(currentX, posY);
+            currentX += option.OptionName.Length + padding;
+        }
+    }
     public T Run(string prompt)
     {
-        T[] values = (T[])Enum.GetValues(typeof(T));
+        
         ConsoleHelpers.DrawWindow(prompt);
-        ConsoleHelpers.DrawOptions(_options);
+        OptionRenderer.DrawOptions(_options);
         ConsoleKeyInfo keyInfo = default;
         do
         {
-
-            if (_windowHeight != Console.WindowHeight || _windowWidth != Console.WindowWidth)
+            if (WindowHeight != Console.WindowHeight || WindowWidth != Console.WindowWidth)
             {
                 Console.Clear();
-                ConsoleHelpers.UpdateOptionPositions<T>(_options, OptionY);
+                UpdateOptionPositions();
                 ConsoleHelpers.DrawWindow(prompt);
-                ConsoleHelpers.DrawOptions(_options);
-                _windowWidth = Console.WindowWidth;
-                _windowHeight = Console.WindowHeight;
+                OptionRenderer.DrawOptions(_options);
+                WindowWidth = Console.WindowWidth;
+                WindowHeight = Console.WindowHeight;
             }
             if (Console.KeyAvailable)
             {
@@ -59,21 +79,21 @@ public class OptionSelector<T> where T : Enum
                 switch (keyInfo.Key)
                 {
                     case ConsoleKey.LeftArrow:
-                        if (_selectedIndex != 0)
+                        if (SelectedIndex != 0)
                         {
-                            ConsoleHelpers.DrawOptions(_options, -1, _selectedIndex);
-                            _options[_selectedIndex].IsSelected = false;
-                            _selectedIndex--;
-                            _options[_selectedIndex].IsSelected = true;
+                            OptionRenderer.DrawOptions(_options, -1, SelectedIndex);
+                            _options[SelectedIndex].IsSelected = false;
+                            SelectedIndex--;
+                            _options[SelectedIndex].IsSelected = true;
                         }
                         break;
                     case ConsoleKey.RightArrow:
-                        if (_selectedIndex != values.Length - 1)
+                        if (SelectedIndex != Values.Length - 1)
                         {
-                            ConsoleHelpers.DrawOptions(_options, 1, _selectedIndex);
-                            _options[_selectedIndex].IsSelected = false;
-                            _selectedIndex++;
-                            _options[_selectedIndex].IsSelected = true;
+                            OptionRenderer.DrawOptions(_options, 1, SelectedIndex);
+                            _options[SelectedIndex].IsSelected = false;
+                            SelectedIndex++;
+                            _options[SelectedIndex].IsSelected = true;
                         }
                         break;
                     default:
@@ -82,12 +102,7 @@ public class OptionSelector<T> where T : Enum
             }
             else
                 Thread.Sleep(100);
-
-
         } while (keyInfo.Key != ConsoleKey.Enter);
-
-        return values[_selectedIndex];
+        return Values[SelectedIndex];
     }
-
-
 }
