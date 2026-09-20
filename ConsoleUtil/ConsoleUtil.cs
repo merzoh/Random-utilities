@@ -3,6 +3,7 @@ public static class ConsoleHelpers
 {
     public static void DrawWindow(string prompt)
     {
+        Console.Clear();
         Console.CursorVisible = false;
         DrawLine();
         Console.SetCursorPosition(0, Console.WindowHeight - 1);

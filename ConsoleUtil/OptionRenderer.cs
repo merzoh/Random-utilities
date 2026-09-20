@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic.FileIO;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,36 +9,32 @@ public static class OptionRenderer
 {
     public static void DrawOptions(MenuOptions[] options, int direction, int currentSelection)
     {
-        Console.SetCursorPosition(options[currentSelection].StartPos.x - 1, options[currentSelection].StartPos.y);
         Console.ResetColor();
-        // Console.Write(new string(' ', options[currentSelection].OptionName.Length + 2));
         Console.SetCursorPosition(options[currentSelection].StartPos.x - 1, options[currentSelection].StartPos.y);
         Console.Write($" {options[currentSelection].OptionName} ");
         Console.ForegroundColor = ConsoleColor.Black;
         Console.BackgroundColor = ConsoleColor.White;
         Console.SetCursorPosition(options[currentSelection + direction].StartPos.x - 1, options[currentSelection + direction].StartPos.y);
-        Console.Write($"[{options[currentSelection + direction].OptionName}]");
+        Console.Write($">{options[currentSelection + direction].OptionName}<");
         Console.ResetColor();
     }
-    public static void DrawOptions(MenuOptions[] options)
+    public static void DrawOptions(MenuOptions[] options, int currentSelection)
     {
-        foreach (var option in options)
+        for (int i = 0; i < options.Length; i++)
         {
-
-            if (option.IsSelected)
+            if (i == currentSelection)
             {
-                Console.SetCursorPosition((option.StartPos.x - 1), option.StartPos.y);
+                Console.SetCursorPosition((options[0].StartPos.x - 1), options[0].StartPos.y);
                 Console.ForegroundColor = ConsoleColor.Black;
                 Console.BackgroundColor = ConsoleColor.White;
-                Console.Write($"[{option.OptionName}]");
+                Console.Write($">{options[0].OptionName}<");
                 Console.ResetColor();
             }
             else
             {
-                Console.SetCursorPosition(option.StartPos.x, option.StartPos.y);
-                Console.Write(option.OptionName);
+                Console.SetCursorPosition(options[i].StartPos.x, options[i].StartPos.y);
+                Console.Write(options[i].OptionName);
             }
-
         }
     }
 }
