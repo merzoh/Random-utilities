@@ -13,18 +13,19 @@ public class MenuManager<T> where T : Enum
     private T[] Values { get; }
     private Type EnumType { get; }
     private int TotalChar { get; set; } = 0;
-    private int Padding { get; set; }
+    private int Padding => ((Console.WindowWidth - TotalChar) / (Values.Length + 1));
     private int WindowWidth { get; set; }
     private int WindowHeight { get; set; }
     private int OptionY => (int)(Console.WindowHeight * (2f / 3f)) - 1;
     //METHODS
     public void UpdateOptionPositions()
     {
-        int padding = (WindowWidth - TotalChar / (Values.Length + 1));
+        int padding = Padding;
         int currentX = padding - 1;
+        int posY = OptionY;
         foreach (var option in options)
         {
-            option.UpdatePos(currentX, OptionY);
+            option.UpdatePos(currentX, posY);
             currentX += option.OptionName.Length + padding;
         }
     }
@@ -69,14 +70,14 @@ public class MenuManager<T> where T : Enum
         }
         WindowWidth = Console.WindowWidth;
         WindowHeight = Console.WindowHeight;
-        Padding = ((WindowWidth - TotalChar) / (Values.Length + 1));
-        int currentX = Padding - 1;
+        int padding = Padding;
+        int currentX = padding - 1;
         
         for (int i = 0; i < Values.Length; i++)
         {
             string name = Values.GetValue(i).ToString();
             options[i] = new MenuOptions(name, (currentX, OptionY));
-            currentX += name.Length + Padding;
+            currentX += name.Length + padding;
 
         }
     }

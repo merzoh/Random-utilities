@@ -4,13 +4,13 @@ public static class ConsoleHelpers
     public static void DrawWindow(string prompt)
     {
         Console.Clear();
-        Console.CursorVisible = false;
-        DrawLine();
+        DrawHorizontalLine();
         Console.SetCursorPosition(0, Console.WindowHeight - 1);
-        DrawLine();
+        DrawHorizontalLine();
+        DrawBorders();
         Console.SetCursorPosition((Console.WindowWidth - prompt.Length) / 2, ((int)(Console.WindowHeight * (1f / 3f))));
         Console.Write(prompt);
-        void DrawLine()
+        void DrawHorizontalLine()
         {
             for (int i = 0; i < Console.WindowWidth; i++)
             {
@@ -19,6 +19,24 @@ public static class ConsoleHelpers
                 Console.ForegroundColor = ConsoleColor.White;
             }
         }
+        void DrawBorders()
+        {
+            for (int i = 1; i < Console.WindowHeight - 1; i++)
+            {
+                Console.SetCursorPosition(0, i);
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write("|");
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+            for (int i = 1; i < Console.WindowHeight - 1; i++)
+            {
+                Console.SetCursorPosition(Console.WindowWidth - 1, i);
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write("|");
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+        }
+        Console.CursorVisible = false;
     }
     public static string ReadMaskedKey(char maskChar = '*')
     {
