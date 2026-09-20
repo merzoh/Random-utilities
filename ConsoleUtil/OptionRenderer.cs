@@ -24,10 +24,10 @@ public static class OptionRenderer
         {
             if (i == currentSelection)
             {
-                Console.SetCursorPosition((options[0].StartPos.x - 1), options[0].StartPos.y);
+                Console.SetCursorPosition((options[i].StartPos.x - 1), options[i].StartPos.y);
                 Console.ForegroundColor = ConsoleColor.Black;
                 Console.BackgroundColor = ConsoleColor.White;
-                Console.Write($">{options[0].OptionName}<");
+                Console.Write($">{options[i].OptionName}<");
                 Console.ResetColor();
             }
             else

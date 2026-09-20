@@ -45,10 +45,7 @@ public static class ConsoleHelpers
         {
             ConsoleKeyInfo keyInfo = Console.ReadKey(true);
             if (keyInfo.Key == ConsoleKey.Enter)
-            {
-                Console.WriteLine();
                 return input;
-            }
             else if (keyInfo.Key == ConsoleKey.Backspace)
             {
                 if (input.Length > 0)

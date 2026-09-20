@@ -7,7 +7,7 @@ namespace ConsoleUtil;
 public class OptionSelector
 {
     //Fields and Properties
-    public int SelectedIndex { get; private set; } = 0;
+    public int SelectedIndex { get; private set; }
     //Methods
     public void ChangeSelection(int optionCount, MenuOptions[] options, ConsoleKeyInfo keyInfo)
     {
@@ -30,5 +30,9 @@ public class OptionSelector
             default:
                 break;
         }
+    }
+    public OptionSelector()
+    {
+        SelectedIndex = 0;
     }
 }
