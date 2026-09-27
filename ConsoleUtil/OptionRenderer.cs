@@ -37,4 +37,29 @@ public static class OptionRenderer
             }
         }
     }
+    public static void WrapAround(MenuOptions[] options, int direction, int currentSelection)
+    {
+        if (direction == 1)
+        {
+            Console.ResetColor();
+            Console.SetCursorPosition(options[currentSelection].StartPos.x - 1, options[currentSelection].StartPos.y);
+            Console.Write($" {options[currentSelection].OptionName} ");
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.SetCursorPosition(options[0].StartPos.x - 1, options[0].StartPos.y);
+            Console.Write($">{options[0].OptionName}<");
+            Console.ResetColor();
+        }
+        else
+        {
+            Console.ResetColor();
+            Console.SetCursorPosition(options[currentSelection].StartPos.x - 1, options[currentSelection].StartPos.y);
+            Console.Write($" {options[currentSelection].OptionName} ");
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.SetCursorPosition(options[options.Length - 1].StartPos.x - 1, options[options.Length - 1].StartPos.y);
+            Console.Write($">{options[options.Length - 1].OptionName}<");
+            Console.ResetColor();
+        }
+    }
 }

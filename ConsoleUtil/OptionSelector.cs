@@ -7,7 +7,7 @@ namespace ConsoleUtil;
 public class OptionSelector
 {
     //Fields and Properties
-    public int SelectedIndex { get; private set; }
+    public int SelectedIndex { get; private set; } = 0;
     //Methods
     public void ChangeSelection(int optionCount, MenuOptions[] options, ConsoleKeyInfo keyInfo)
     {
@@ -19,6 +19,11 @@ public class OptionSelector
                     OptionRenderer.DrawOptions(options, -1, SelectedIndex);
                     SelectedIndex--;
                 }
+                else
+                {
+                    OptionRenderer.WrapAround(options, 1, SelectedIndex);
+                    SelectedIndex = options.Length - 1;
+                }
                 break;
             case ConsoleKey.RightArrow:
                 if (SelectedIndex != optionCount - 1)
@@ -26,13 +31,14 @@ public class OptionSelector
                     OptionRenderer.DrawOptions(options, 1, SelectedIndex);
                     SelectedIndex++;
                 }
+                else
+                {
+                    OptionRenderer.WrapAround(options, 1, SelectedIndex);
+                    SelectedIndex = 0;
+                }
                 break;
             default:
                 break;
         }
-    }
-    public OptionSelector()
-    {
-        SelectedIndex = 0;
     }
 }
