@@ -31,6 +31,7 @@ public class MenuManager<T> where T : Enum
     }
     public T Run(string prompt)
     {
+        Console.Clear();
         OptionRenderer.DrawOptions(options, selector.SelectedIndex);
         Console.SetCursorPosition((Console.WindowWidth - prompt.Length) / 2, ((int)(Console.WindowHeight * (1f / 3f))));
         Console.Write(prompt);
