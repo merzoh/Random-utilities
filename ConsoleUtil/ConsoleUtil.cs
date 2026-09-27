@@ -1,6 +1,13 @@
 ﻿namespace ConsoleUtil;
 public static class ConsoleHelpers
 {
+    public static string GetInput(string prompt)
+    {
+        Console.Clear();
+        Console.SetCursorPosition((Console.WindowWidth - prompt.Length) / 2, (int)(Console.WindowHeight * (1f / 3f)));
+        Console.Write(prompt);
+        return Console.ReadLine();
+    }
     public static void DrawWindow()
     {
         Console.Clear();                              
