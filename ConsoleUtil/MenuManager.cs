@@ -34,18 +34,21 @@ public class MenuManager<T> where T : Enum
         OptionRenderer.DrawOptions(options, selector.SelectedIndex);
         Console.SetCursorPosition((Console.WindowWidth - prompt.Length) / 2, ((int)(Console.WindowHeight * (1f / 3f))));
         Console.Write(prompt);
+        Console.CursorVisible = false;
         ConsoleKeyInfo keyInfo = default;
         do
         {
             
             if (WindowHeight != Console.WindowHeight || WindowWidth != Console.WindowWidth)
             {
+                Console.Clear();
                 UpdateOptionPositions();
                 Console.SetCursorPosition((Console.WindowWidth - prompt.Length) / 2, ((int)(Console.WindowHeight * (1f / 3f))));
                 Console.Write(prompt);
                 OptionRenderer.DrawOptions(options, selector.SelectedIndex);
                 WindowWidth = Console.WindowWidth;
                 WindowHeight = Console.WindowHeight;
+                Console.CursorVisible = false;
             }
             if (Console.KeyAvailable)
             {
