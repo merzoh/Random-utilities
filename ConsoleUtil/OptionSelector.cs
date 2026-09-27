@@ -21,7 +21,7 @@ public class OptionSelector
                 }
                 else
                 {
-                    OptionRenderer.WrapAround(options, 1, SelectedIndex);
+                    OptionRenderer.WrapAround(options, 0, SelectedIndex);
                     SelectedIndex = options.Length - 1;
                 }
                 break;
