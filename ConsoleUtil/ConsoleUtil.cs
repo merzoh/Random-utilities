@@ -1,15 +1,15 @@
 ﻿namespace ConsoleUtil;
 public static class ConsoleHelpers
 {
-    public static void DrawWindow(string prompt)
+    public static void DrawWindow()
     {
-        Console.Clear();
+        Console.Clear();                              
         DrawHorizontalLine();
-        Console.SetCursorPosition(0, Console.WindowHeight - 1);
+        Console.SetCursorPosition(0, Console.WindowHeight - 1);                     
         DrawHorizontalLine();
         DrawBorders();
-        Console.SetCursorPosition((Console.WindowWidth - prompt.Length) / 2, ((int)(Console.WindowHeight * (1f / 3f))));
-        Console.Write(prompt);
+        
+        
         void DrawHorizontalLine()
         {
             for (int i = 0; i < Console.WindowWidth; i++)

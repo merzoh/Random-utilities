@@ -31,9 +31,9 @@ public class MenuManager<T> where T : Enum
     }
     public T Run(string prompt)
     {
-
-        ConsoleHelpers.DrawWindow(prompt);
         OptionRenderer.DrawOptions(options, selector.SelectedIndex);
+        Console.SetCursorPosition((Console.WindowWidth - prompt.Length) / 2, ((int)(Console.WindowHeight * (1f / 3f))));
+        Console.Write(prompt);
         ConsoleKeyInfo keyInfo = default;
         do
         {
@@ -41,7 +41,8 @@ public class MenuManager<T> where T : Enum
             if (WindowHeight != Console.WindowHeight || WindowWidth != Console.WindowWidth)
             {
                 UpdateOptionPositions();
-                ConsoleHelpers.DrawWindow(prompt);
+                Console.SetCursorPosition((Console.WindowWidth - prompt.Length) / 2, ((int)(Console.WindowHeight * (1f / 3f))));
+                Console.Write(prompt);
                 OptionRenderer.DrawOptions(options, selector.SelectedIndex);
                 WindowWidth = Console.WindowWidth;
                 WindowHeight = Console.WindowHeight;
