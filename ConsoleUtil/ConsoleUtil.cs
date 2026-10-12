@@ -1,5 +1,5 @@
-﻿namespace ConsoleUtil;
-public static class ConsoleHelpers
+﻿namespace ConsoleUtilities;
+public static class ConsoleUtilities
 {
     public static string GetInput(string prompt)
     {
