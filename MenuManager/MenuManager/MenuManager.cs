@@ -9,12 +9,12 @@ public class MenuManager
     private int SelectedIndex { get; set; } = 0;
     private int WindowWidth { get; set; } = Console.WindowWidth;
     private int WindowHeight { get; set; } = Console.WindowHeight;
-    public MenuItem Run(IEnumerable<MenuItem> options, string prompt)
+    public MenuItem Run(IEnumerable<MenuItem> options, string prompt, ConsoleColor optionsColor = ConsoleColor.White)
     {
         Console.SetCursorPosition((WindowWidth - prompt.Length) / 2, _promptY);
         Console.Write(prompt);
         List<MenuItem> optionList = CalculateOptionPositions(options.ToList());
-        OptionRenderer.RenderOptions(optionList);
+        OptionRenderer.RenderOptions(optionList, optionsColor);
         ConsoleKeyInfo keyInfo = default;
         Console.CursorVisible = false;
         do
@@ -22,7 +22,7 @@ public class MenuManager
             if (Console.KeyAvailable)
             {
                 keyInfo = Console.ReadKey(true);
-                OptionRenderer.ClearSelectedOption(optionList, SelectedIndex);
+                OptionRenderer.ClearSelectedOption(optionList, SelectedIndex, optionsColor);
                 if (keyInfo.Key == ConsoleKey.LeftArrow)
                 {
                     SelectedIndex--;
@@ -40,13 +40,13 @@ public class MenuManager
         } while (keyInfo.Key != ConsoleKey.Enter);
         return optionList[SelectedIndex];
     }
-    public MenuItem Run(IEnumerable<MenuItem> options, string prompt, string message, ConsoleColor messageColor)
+    public MenuItem Run(IEnumerable<MenuItem> options, string prompt, string message, ConsoleColor messageColor, ConsoleColor optionsColor = ConsoleColor.White)
     {
         
         Console.SetCursorPosition((WindowWidth - message.Length) / 2, _promptY + 1);
         Console.ForegroundColor = messageColor;
         Console.Write(message);
-        return Run(options, prompt);
+        return Run(options, prompt, optionsColor);
     }
     private List<MenuItem> CalculateOptionPositions(List<MenuItem> options)
     {

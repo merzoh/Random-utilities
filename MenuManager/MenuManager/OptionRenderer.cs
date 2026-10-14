@@ -2,7 +2,7 @@ namespace MenuManagerUtility;
 public static class OptionRenderer
 {
     private static readonly int _optionY = (int)(Console.WindowHeight * (2f / 3f)) - 1;
-    public static void RenderOptions<T>(IEnumerable<T> options) where T : IMenuOptions
+    public static void RenderOptions<T>(IEnumerable<T> options, ConsoleColor optionColor) where T : IMenuOptions
     {
         var optionList = options.ToList();
         Console.SetCursorPosition(optionList[0].OptionX, _optionY);
@@ -14,8 +14,10 @@ public static class OptionRenderer
         {
             var option = optionList[i];
             Console.SetCursorPosition(option.OptionX, _optionY);
+            Console.ForegroundColor = optionColor;
             Console.Write(option.OptionName);
         }
+        Console.ResetColor();
     }
     public static void MoveSelector<T>(IEnumerable<T> options, int selectedIndex) where T : IMenuOptions
     {
@@ -27,11 +29,13 @@ public static class OptionRenderer
         Console.Write(option.OptionName);
         Console.ResetColor();
     }
-    public static void ClearSelectedOption<T>(IEnumerable<T> options, int selectedIndex) where T : IMenuOptions
+    public static void ClearSelectedOption<T>(IEnumerable<T> options, int selectedIndex, ConsoleColor optionColor) where T : IMenuOptions
     {
         var optionList = options.ToList();
         var option = optionList[selectedIndex];
         Console.SetCursorPosition(option.OptionX, _optionY);
+        Console.ForegroundColor = optionColor;
         Console.Write(option.OptionName);
+        Console.ResetColor();
     }
 }
